@@ -12,8 +12,33 @@ const Signup = () => {
         sucess: false
     });
 
+    const { name, email, password } = values;
+
     const handeChange = name => event => {
         setValues({...values, error: false, [name]: event.target.value})
+    }
+
+    const signup = (user) => {
+        console.log(name, email, password)
+        fetch(`${API}/signup`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    const clickSubmit = (event) => {
+        event.preventDefault();
+        signup({ name, email, password });
     }
 
     const signUpForm = () => {
@@ -33,7 +58,7 @@ const Signup = () => {
                     <label className="text-muted"> Password</label>
                     <input onChange={handeChange("password")} type="password" className="form-control"></input>
                 </div>
-                <button className="btn btn-primary">
+                <button onClick={clickSubmit} className="btn btn-primary">
                     Submit
                 </button>
             </form>
