@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Layout from "../core/Layout";
 import { API } from "../config";
 
@@ -9,10 +10,10 @@ const Signup = () => {
         email: "",
         password: "",
         error: "",
-        sucess: false
+        Success: false
     });
 
-    const { name, email, password } = values;
+    const { name, email, password, error, success } = values;
 
     const handeChange = name => event => {
         setValues({...values, error: false, [name]: event.target.value})
@@ -20,7 +21,7 @@ const Signup = () => {
 
     const signup = (user) => {
         console.log(name, email, password)
-        fetch(`${API}/signup`, {
+        return fetch(`${API}/signup`, {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -38,7 +39,22 @@ const Signup = () => {
 
     const clickSubmit = (event) => {
         event.preventDefault();
-        signup({ name, email, password });
+        setValues({...values, error: false})
+        signup({ name, email, password })
+        .then(data => {
+            if(data.error) {
+                setValues({ ...values, error: data.error, success: false })
+            } else {
+                setValues({
+                    ...values,
+                    name: "",
+                    email: "",
+                    password: "",
+                    error: "",
+                    success: true
+                })
+            }
+        })
     }
 
     const signUpForm = () => {
@@ -46,17 +62,32 @@ const Signup = () => {
             <form>
                 <div className="form-group">
                     <label className="text-muted"> Name</label>
-                    <input onChange={handeChange("name")} type="text" className="form-control"></input>
+                    <input
+                        onChange={handeChange("name")} 
+                        type="text"
+                        className="form-control"
+                        value={name}
+                    />
                 </div>
 
                 <div className="form-group">
                     <label className="text-muted"> Email</label>
-                    <input onChange={handeChange("email")} type="email" className="form-control"></input>
+                    <input
+                        onChange={handeChange("email")}
+                        type="email"
+                        className="form-control"
+                        value={email}
+                    />
                 </div>
 
                 <div className="form-group">
                     <label className="text-muted"> Password</label>
-                    <input onChange={handeChange("password")} type="password" className="form-control"></input>
+                    <input
+                        onChange={handeChange("password")}
+                        type="password"
+                        className="form-control"
+                        value={password}
+                    />
                 </div>
                 <button onClick={clickSubmit} className="btn btn-primary">
                     Submit
@@ -65,14 +96,29 @@ const Signup = () => {
         )
     }
 
+    const showError = () =>  (
+            <div className="alert alert-danger" style={{display: error ? "" : "none"}}>
+                {error}
+            </div>
+        )
+    
+
+    const showSuccess = () => (
+            <div className="alert alert-info" style={{display: success ? "" : "none"}}>
+               New account is created. Please <Link to="/signin">Signin</Link>
+            </div>
+    )
+    
+
     return(
         <Layout 
             title="Signup"
             description="Signup to React E-commperce App"
             className="container col-md-8 offset-md-2"
             >
-           {signUpForm()}
-           {JSON.stringify(values)}
+            {showSuccess()}
+            {showError()}
+            {signUpForm()}
         </Layout>
     )
 }
