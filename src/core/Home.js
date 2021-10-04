@@ -1,9 +1,10 @@
+import Layout from "./Layout";
 
 const Home = () => {
     return (
-        <div>
-            Home 
-        </div>
+       <Layout title="Home Page" description="Node React E-commperce App">
+           ...
+        </Layout>
     )
 }
 
