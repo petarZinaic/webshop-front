@@ -83,7 +83,7 @@ const Signin = () => {
 
     const redirectUser = () => {
         if(redirectToReferrer) {
-            return <Redirect to="home"/>
+            return <Redirect to="/"/>
         }
     }
     
