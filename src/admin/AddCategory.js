@@ -81,7 +81,7 @@ const AddCategory = () => {
             description={`G day ${user.name}, ready to add a new category`}
         >
         <div className="row">
-          <div className="col-8 offset-md-2">
+          <div className="col-md-8 offset-md-2">
               {showSuccess()}
               {showError()}
               {newCategoryForm()}
