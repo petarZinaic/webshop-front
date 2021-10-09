@@ -85,11 +85,15 @@ const Signin = () => {
     const redirectUser = () => {
         if(redirectToReferrer) {
             if(user && user.role === 1) {
-                return <Redirect to="admin/dashboard" />;
+                return <Redirect to="/admin/dashboard" />;
             }
             else {
-                return <Redirect to="user/dashboard" />
+                return <Redirect to="/user/dashboard" />
             }
+        }
+
+        if(isAuthenticated()) {
+            return <Redirect to="/" />
         }
     }
     
