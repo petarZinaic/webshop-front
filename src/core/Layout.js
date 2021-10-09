@@ -1,5 +1,6 @@
 import Menu from "./Menu";
 import "./Layout.css";
+import "../styles.css";
 
 const Layout = ({ 
     title = "Title", 
