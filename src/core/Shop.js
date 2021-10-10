@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import { getProducts } from "./apiCore";
 import Card from "./Card";
 import { getCategories } from "./apiCore";
+import Checkbox from "./Checkbox";
 
 const Shop = () => {
 
@@ -32,7 +33,10 @@ const Shop = () => {
         >
             <div className="row">
                 <div className="col-4">
-                   {JSON.stringify(categories)}
+                    <h4>Filter by categories </h4>
+                    <ul>
+                        <Checkbox  categories={categories}/>
+                    </ul>
                 </div>
 
                 <div className="col-8">
