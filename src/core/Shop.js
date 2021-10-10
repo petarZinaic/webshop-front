@@ -2,8 +2,28 @@ import { useState ,useEffect } from "react";
 import Layout from "./Layout";
 import { getProducts } from "./apiCore";
 import Card from "./Card";
+import { getCategories } from "./apiCore";
 
 const Shop = () => {
+
+    const [ categories, setCategories ] = useState([]);
+    const [ error, setError ] = useState("")
+
+    const init = () => {
+        getCategories().then(data => {
+            if(data.error) {
+                setError(data.error);
+            } else {
+                setCategories(data)
+            }
+            
+        })
+    }
+
+    useEffect(() => {
+        init();
+    }, [])
+
     return (
         <Layout
          title="Shop Page"
@@ -12,7 +32,7 @@ const Shop = () => {
         >
             <div className="row">
                 <div className="col-4">
-                    left sidebar
+                   {JSON.stringify(categories)}
                 </div>
 
                 <div className="col-8">
