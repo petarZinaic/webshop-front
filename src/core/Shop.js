@@ -31,12 +31,11 @@ const Shop = () => {
     }
 
     const loadFilteredResults = (newFilters) => {
-        // console.log(newFilters)
         getFilteredProduct(skip, limit, newFilters).then(data => {
             if(data.error) {
                 setError(data.error);
             } else {
-                setFilteredResults(data)
+                setFilteredResults(data.data)
             }
         });
     }
@@ -47,7 +46,6 @@ const Shop = () => {
     }, []);
 
     const handleFilters = (filters, filterBy) => {
-        // console.log("shop", filters, filterBy);
         const newFilters = {...myFilters };
         newFilters.filters[filterBy] = filters;
 
@@ -73,6 +71,16 @@ const Shop = () => {
         }
 
         return array;
+    }
+
+    const renderFilteredResults = (filteredResults) => {
+        if(!filteredResults) return;
+
+        return (
+            filteredResults.map((product, i) => (
+                <Card key={i} product={product} />
+            ))
+        )
     }
 
   
@@ -106,7 +114,10 @@ const Shop = () => {
                 </div>
 
                 <div className="col-8">
-                    {JSON.stringify(filteredResults)}
+                        <h2 className="mb-4">Products</h2>
+                        <div className="row"> 
+                            {renderFilteredResults(filteredResults)}
+                        </div>
                 </div>
             </div>
         </Layout>
