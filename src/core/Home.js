@@ -45,8 +45,6 @@ const Home = () => {
             <div className="row">
                 {productsBySell.map((product, i) => (<Card key={i} product={product} />))}
             </div>
-           
-
         </Layout>
     )
 }
