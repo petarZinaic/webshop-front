@@ -1,6 +1,7 @@
 import { useState ,useEffect } from "react";
 import Layout from "./Layout";
-import { getProducts, getBraintreeClientToken } from "./apiCore";
+import { getProducts, getBraintreeClientToken, processPayment } from "./apiCore";
+import { emptyCart } from "./cartHelpers";
 import Card from "./Card";
 import { isAuthenticated } from "../auth";
 import { Link } from "react-router-dom";
@@ -10,6 +11,7 @@ const Checkout = ({ products }) => {
 
     const [ data, setData ] = useState({
         sucess: false,
+        loading: false,
         clientToken: null,
         error: "",
         instance: {},
@@ -24,7 +26,7 @@ const Checkout = ({ products }) => {
             if(data.error) {
                 setData({...data, error: data.error});
             } else { 
-                setData({...data, clientToken: data.clientToken})
+                setData({ clientToken: data.clientToken})
             }
         
         });
@@ -46,13 +48,27 @@ const Checkout = ({ products }) => {
         let getNonce = data.instance
         .requestPaymentMethod()
         .then(data => {
-            console.log(data)
+            // console.log(data)
             nonce = data.nonce;
 
-            console.log("send nonce and total to process: ", nonce, getTotal(products))
+            // console.log("send nonce and total to process: ", nonce, getTotal(products))
+            const paymentData = {
+                paymentMethondNonce: nonce,
+                amount: getTotal(products)
+            }
+
+            processPayment(userId, token, paymentData)
+            .then(response => {
+                setData({...data, sucess: response.success})
+                emptyCart(() => {
+                    console.log("payment sucess and empty cart")
+                })
+
+            })
+            .catch(error => console.log(error))
         })
         .catch(error => {
-            console.log("dropin error: ", error)
+            // console.log("dropin error: ", error)
             setData({... data, error: error.message})
         })
     }
@@ -62,9 +78,10 @@ const Checkout = ({ products }) => {
             {data.clientToken !== null && products.length > 0 ? (
                 <div>
                     <DropIn options={{
-                        authorization: data.clientToken
+                        authorization: data.clientToken,
+                        
                     }} onInstance={instance => (setData({...data, instance: instance}))} />
-                    <button onClick={buy} className="btn btn-success">Pay</button>
+                    <button onClick={buy} className="btn btn-success btn-block">Pay</button>
                    
                 </div>
             ) : null}
@@ -89,6 +106,12 @@ const Checkout = ({ products }) => {
             {error}
         </div>
     )
+
+    const showSuccess = success => (
+        <div className="alert alert-info" style={{ display: success ? "" : "none" }}>
+           Thanks! Your payment was successful!
+        </div>
+    )
         
     
 
@@ -97,6 +120,7 @@ const Checkout = ({ products }) => {
     return (
       <div>
           <h2>Total: ${getTotal()}</h2>
+          {showSuccess(data.sucess)}
         {showError(data.error)}
         {showCheckout()}
       </div>
