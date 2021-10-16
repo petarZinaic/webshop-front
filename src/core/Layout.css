@@ -2,3 +2,33 @@ div {
     overflow-x: hidden;
 }
 
+.braintree-placeholder .upper-container {
+    overflow-y: hidden !important;
+}
+
+.braintree-method .braintree-method--active {
+    overflow-y: hidden !important;
+}
+
+.braintree-heading .braintree-placeholder {
+    overflow-y: hidden !important;
+}
+
+.braintree-placeholder {
+    overflow-y: hidden;
+}
+
+.braintree-heading {
+    overflow-y: hidden !important;
+}
+
+.braintree-method .braintree-method__icon {
+    overflow-y: hidden !important;
+
+}
+
+.braintree-method__label--small {
+    overflow-y: hidden !important;
+
+}
+

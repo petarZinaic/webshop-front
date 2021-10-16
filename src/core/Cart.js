@@ -8,6 +8,8 @@ import Checkout from "./Checkout";
 const Cart = () => {
     const [ items, setItems ] = useState([]);
     const [cartSize, setCartSize] = useState(0);
+    const [run, setRun] = useState(false);
+
 
     const changeCartSize = () => {
         setCartSize(getCart().length);
@@ -15,8 +17,7 @@ const Cart = () => {
 
     useEffect(() => {
         setItems(getCart());
-        changeCartSize();
-    }, [cartSize])
+    }, [run]);
 
     const showItems = items => {
         return (
@@ -30,6 +31,8 @@ const Cart = () => {
                     showAddToCartButton={false}
                     cartUpdate={true}
                     showRemoveProductButton={true}
+                    setRun={setRun}
+                    run={run}
                 />
                 ))}
             </div>
